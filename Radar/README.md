@@ -16,5 +16,6 @@
 
 ## Python Interface
 - Solltet ihr noch kein Python installiert haben würde ich euch [Miniconda](https://docs.anaconda.com/free/miniconda/miniconda-install/) als Venv Manager und [VS Code](https://code.visualstudio.com/download) als Text Editor empfehlen
-- Ein Prototyp des Interfaces kann unter test.py ausprobiert werden.
+- Ein Prototyp des Interfaces kann unter test.py ausprobiert werden
+  - Dazu müssen in der com dictionary unter 'conf_port' der Portname des Enhanced COM und unter 'data_port' der Name des Standard COM angegeben werden
 
