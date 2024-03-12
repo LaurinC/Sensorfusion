@@ -19,3 +19,12 @@
 - Ein Prototyp des Interfaces kann unter test.py ausprobiert werden
   - Dazu müssen in der com dictionary unter 'conf_port' der Portname des Enhanced COM und unter 'data_port' der Name des Standard COM angegeben werden
 
+## Sources
+- [Produkt Seite](https://www.ti.com/tool/IWR6843AOPEVM#tech-docs)
+- [UART Format](https://dev.ti.com/tirex/explore/node?node=A__ADnbI7zK9bSRgZqeAxprvQ__radar_toolbox__1AslXXD__LATEST)
+- [mmWave Demo Visualizer User Guide](https://www.ti.com/lit/ug/swru529c/swru529c.pdf?ts=1709519302062&ref_url=https%253A%252F%252Fwww.google.com%252F)
+
+## Interessante Repos
+- [C++ Implementierung](https://github.com/radar-lab/ti_mmwave_rospkg/tree/master)
+- [Python Implementierung](https://github.com/m6c7l/pymmw/tree/master)
+  - Für mich etwas unverständlicher Code, aber kann interessant sein
