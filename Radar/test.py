@@ -4,7 +4,7 @@ from time import time
 """
 Small test script for showcasing interface (and its problems)
 
-Requires Demo Firmware to be flashed before hand
+Requires Demo Firmware to be flashed beforehand
 """
 
 if __name__ == '__main__':
