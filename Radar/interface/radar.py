@@ -42,6 +42,9 @@ class Radar():
             7: 'side_info'
         }
 
+    def has_data(self):
+        return self.data.inWaiting() > 0
+
     def __del__(self):
         # stop radar and close serial ports on destruction
         stop_radar(self.conf)

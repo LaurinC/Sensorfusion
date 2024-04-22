@@ -1,28 +1,81 @@
 from serial import Serial
 
 """
-Module for configurating radar
+Module for configuring radar.
+
+This module provides functions to configure and control a radar sensor using a serial connection.
 
 TODO:
 - apply parametrized cfg instead of MWE
+
+Functions:
+- read_until_empty(conf: Serial, verbose: bool = False) -> None:
+    Reads lines from the serial connection until an empty line is encountered.
+
+- baudrate_data(conf: Serial) -> None:
+    Configures the data UART baudrate for the radar sensor.
+
+- config_radar(conf: Serial, start: bool = False) -> None:
+    Configures the radar sensor with the desired parameters.
+    If 'start' is True, the sensor is started after configuration.
+
+- start_radar(conf: Serial, full_config: bool = False, verbose: bool = True) -> None:
+    Starts the radar sensor.
+    If 'full_config' is True, the sensor is started with full configuration.
+    If 'verbose' is True, the function prints the received lines from the sensor.
+
+- stop_radar(conf: Serial, verbose: bool = True) -> None:
+    Stops the radar sensor.
+    If 'verbose' is True, the function prints the received lines from the sensor.
 """
 
-def read_until_empty(conf : Serial, verbose : bool = False):
+def read_until_empty(conf: Serial, verbose: bool = False) -> None:
+    """
+    Reads lines from the serial connection until an empty line is encountered.
+
+    Args:
+    - conf: Serial - The serial connection object.
+    - verbose: bool - If True, prints the received lines.
+
+    Returns:
+    - None
+    """
     while True:
         line = conf.readline()
-        if line == b'': break
-        if verbose: print(line)
+        if line == b'':
+            break
+        if verbose:
+            print(line)
 
-def baudrate_data(conf : Serial):
-    # config for data uart
+def baudrate_data(conf: Serial) -> None:
+    """
+    Configures the data UART baudrate for the radar sensor.
+
+    Args:
+    - conf: Serial - The serial connection object.
+
+    Returns:
+    - None
+    """
+    # Config for data UART
     conf.write(b'configDataPort 921600 1\n')
     read_until_empty(conf)
 
-def config_radar(conf : Serial, start : bool = False):
-    # stop sensor before configuration
-    stop_radar(conf, verbose = False)
-    # config for MWE
-    conf.write(b'flushCfg\n')
+def config_radar(conf: Serial, start: bool = False) -> None:
+    """
+    Configures the radar sensor with the desired parameters.
+
+    Args:
+    - conf: Serial - The serial connection object.
+    - start: bool - If True, starts the sensor after configuration.
+
+    Returns:
+    - None
+    """
+    # Stop sensor before configuration
+    stop_radar(conf, verbose=False)
+
+    # Config for MWE
     read_until_empty(conf)
     conf.write(b'dfeDataOutputMode 1\n')
     read_until_empty(conf)
@@ -78,18 +131,43 @@ def config_radar(conf : Serial, start : bool = False):
     read_until_empty(conf)
     conf.write(b'calibData 0 0 0\n')
     read_until_empty(conf)
-    if start: start_radar(conf, full_config = True)
 
-def start_radar(conf : Serial, full_config : bool = False, verbose : bool = True):
-    # start sensor
-    if full_config: conf.write(b'sensorStart\n')
-    else: conf.write(b'sensorStart 0\n')
-    read_until_empty(conf, verbose = verbose)
+    if start:
+        start_radar(conf, full_config=True)
 
-def stop_radar(conf : Serial, verbose : bool = True):
-    # stop radar
+def start_radar(conf: Serial, full_config: bool = False, verbose: bool = True) -> None:
+    """
+    Starts the radar sensor.
+
+    Args:
+    - conf: Serial - The serial connection object.
+    - full_config: bool - If True, starts the sensor with full configuration.
+    - verbose: bool - If True, prints the received lines.
+
+    Returns:
+    - None
+    """
+    # Start sensor
+    if full_config:
+        conf.write(b'sensorStart\n')
+    else:
+        conf.write(b'sensorStart 0\n')
+    read_until_empty(conf, verbose=verbose)
+
+def stop_radar(conf: Serial, verbose: bool = True) -> None:
+    """
+    Stops the radar sensor.
+
+    Args:
+    - conf: Serial - The serial connection object.
+    - verbose: bool - If True, prints the received lines.
+
+    Returns:
+    - None
+    """
+    # Stop radar
     conf.write(b'sensorStop\n')
-    read_until_empty(conf, verbose = verbose)
+    read_until_empty(conf, verbose=verbose)
 
 if __name__ == '__main__':
     # test: configurate radar
