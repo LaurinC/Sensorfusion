@@ -5,7 +5,7 @@ import threading
 from interface.radar import Radar
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg  # Correct import
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 # Radar setup
 com = {
@@ -30,11 +30,6 @@ plt.ion()  # Interactive mode on
 canvas = FigureCanvasTkAgg(fig, master=window)
 canvas_widget = canvas.get_tk_widget()
 canvas_widget.pack(fill=tk.BOTH, expand=True)
-
-# Update rate slider
-update_rate_slider = tk.Scale(window, from_=0.2, to=2, resolution=0.01, orient=tk.HORIZONTAL, label="Update Rate (s)")
-update_rate_slider.set(0.5)
-update_rate_slider.pack()
 
 # Pause functionality using threading Event
 pause_event = threading.Event()
@@ -68,6 +63,7 @@ def update_plot():
         y_coords = [coords['y'] for coords in detected_points.values()]
         z_coords = [coords['z'] for coords in detected_points.values()]
 
+        
         ax.clear()
         ax.scatter(x_coords, y_coords, z_coords, c='r', marker='o')
         ax.set_xlabel('X Coordinate')
@@ -75,7 +71,6 @@ def update_plot():
         ax.set_zlabel('Z Coordinate')
 
         canvas.draw()
-        time.sleep(update_rate_slider.get())
 
 # Start the update plot loop in a separate thread
 update_plot_thread = threading.Thread(target=update_plot)
