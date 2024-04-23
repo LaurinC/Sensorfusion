@@ -1,19 +1,26 @@
 import cv2 as cv
-import os
-import numpy as np
-from utils import load_coeffs, load_from_folder
-
-
+from utils import load_coeffs
 
 if __name__ == '__main__':
-    name = 'wide_lense'
-    # load calibration coefficients
-    coeffs = load_coeffs(name)
-    # undistort test image
-    images = load_from_folder(f'images/{name}/')
-    for img in images:
+    # load calibration coefficients    
+    coeffs = load_coeffs('wide_lense')
+
+    # configurate video capture
+    cap = cv.VideoCapture(1, cv.CAP_DSHOW)
+    cap.set(cv.CAP_PROP_FPS, 20)
+    cap.set(cv.CAP_PROP_FRAME_WIDTH, 1280)
+    cap.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
+
+
+    # display undistored image
+    while True:
+        ret, img = cap.read()
+        if not ret: break
+
         udst = cv.undistort(img, coeffs['mtx'], coeffs['dist'], None, coeffs['newmtx'])
-        cv.imshow('undistorted', udst)
-        cv.waitKey(-1)
-        cv.destroyAllWindows()
-        break
+
+        cv.imshow("grab", udst)
+        c = cv.waitKey(1)
+        if c == 27: break
+
+    cv.destroyAllWindows()

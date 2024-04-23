@@ -13,5 +13,5 @@ def load_from_folder(path : str) -> list:
         images.append(cv.imread(os.path.join(path, filename)))
     return images
 
-def load_coeffs(name : str) -> dict | None:
+def load_coeffs(name : str) -> dict:
     return np.load(f'coefficients/{name}.npz')
