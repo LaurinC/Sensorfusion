@@ -9,7 +9,7 @@ Example script for getting bounding boxes from YOLOv8
 Should camera interface be infinite loop or one-shot?
 """
 
-def one_shot(cap : cv.VideoCapture, model : YOLO) -> dict | None:
+def one_shot(cap : cv.VideoCapture, model : YOLO) -> dict:
     # grab image from camera
     ret, img = cap.read()
     if ret is False: return None
@@ -29,7 +29,7 @@ def one_shot(cap : cv.VideoCapture, model : YOLO) -> dict | None:
             # label with distance, veloctiy, ... could be added here
             # TODO: 
             label = f'{model.names[int(c)]}'
-            annotator.box_label(b, label)
+            annotator.box_label(b, label, color = (255,0,0))
     annotated = {
         'img' : annotator.result(),
         'xyxy' : coords
@@ -40,7 +40,10 @@ if __name__ == '__main__':
     # initialize object detection model
     model = YOLO('yolov8n.pt')
     # init camera
-    cap = cv.VideoCapture(0)
+    cap = cv.VideoCapture(1, cv.CAP_DSHOW) # change to correct camera port
+    cap.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
+    cap.set(cv.CAP_PROP_FRAME_WIDTH, 1280)
+
     # capture loop
     while True:
         annotated = one_shot(cap, model)
@@ -49,7 +52,7 @@ if __name__ == '__main__':
             cv.imshow('Detection', annotated['img'])
             # check for loop end
             key = cv.waitKey(1) 
-            if key & 0xFF == 27: break
+            if key == 27: break
     # cleanup
     cap.release()
     cv.destroyAllWindows()
