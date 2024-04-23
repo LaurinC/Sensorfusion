@@ -29,9 +29,5 @@ if __name__ == '__main__':
 
     # test: reading a number of data packages
     data = []
-    for i in range(1):
-        start = time()
-        data.append(sensor())
-        print(f'{time() - start}s')
-    
-    print(data[-1])
+    for i in range(10):
+        print(data[-1] if data else 'No data')

@@ -75,62 +75,40 @@ def config_radar(conf: Serial, start: bool = False) -> None:
     # Stop sensor before configuration
     stop_radar(conf, verbose=False)
 
-    # Config for MWE
-    read_until_empty(conf)
-    conf.write(b'dfeDataOutputMode 1\n')
-    read_until_empty(conf)
-    conf.write(b'channelCfg 3 1 0\n')
-    read_until_empty(conf)
-    conf.write(b'adcCfg 2 1\n')
-    read_until_empty(conf)
-    conf.write(b'adcbufCfg -1 0 1 1 1\n')
-    read_until_empty(conf)
-    conf.write(b'profileCfg 0 60 1192 7 57.14 0 0 70 1 256 5209 0 0 158\n')
-    read_until_empty(conf)
-    conf.write(b'chirpCfg 0 0 0 0 0 0 0 1\n')
-    read_until_empty(conf)
-    conf.write(b'chirpCfg 1 1 0 0 0 0 0 0\n')
-    read_until_empty(conf)
-    conf.write(b'frameCfg 0 0 16 0 100 1 0\n')
-    read_until_empty(conf)
-    conf.write(b'lowPower 0 0\n')
-    read_until_empty(conf)
-    conf.write(b'guiMonitor -1 1 1 0 0 0 0\n')
-    read_until_empty(conf)
-    conf.write(b'cfarCfg -1 0 2 8 4 3 0 15 1\n')
-    read_until_empty(conf)
-    conf.write(b'cfarCfg -1 1 0 4 2 3 1 15 1\n')
-    read_until_empty(conf)
-    conf.write(b'multiObjBeamForming -1 1 0.5\n')
-    read_until_empty(conf)
-    conf.write(b'clutterRemoval -1 0\n')
-    read_until_empty(conf)
-    conf.write(b'calibDcRangeSig -1 0 -5 8 256\n')
-    read_until_empty(conf)
-    conf.write(b'extendedMaxVelocity -1 0\n')
-    read_until_empty(conf)
-    conf.write(b'bpmCfg -1 0 0 1\n')
-    read_until_empty(conf)
-    conf.write(b'lvdsStreamCfg -1 0 0 0\n')
-    read_until_empty(conf)
-    conf.write(b'compRangeBiasAndRxChanPhase 0.0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n')
-    read_until_empty(conf)
-    conf.write(b'measureRangeBiasAndRxChanPhase 0 1.5 0.2\n')
-    read_until_empty(conf)
-    conf.write(b'CQRxSatMonitor 0 3 5 121 0\n')
-    read_until_empty(conf)
-    conf.write(b'CQSigImgMonitor 0 127 4\n')
-    read_until_empty(conf)
-    conf.write(b'analogMonitor 0 0\n')
-    read_until_empty(conf)
-    conf.write(b'aoaFovCfg -1 -90 90 -90 90\n')
-    read_until_empty(conf)
-    conf.write(b'cfarFovCfg -1 0 0 8.92\n')
-    read_until_empty(conf)
-    conf.write(b'cfarFovCfg -1 1 -1 1.00\n')
-    read_until_empty(conf)
-    conf.write(b'calibData 0 0 0\n')
-    read_until_empty(conf)
+    # List of commands to configure the radar
+    commands = [
+        b'dfeDataOutputMode 1',
+        b'channelCfg 15 7 0',
+        b'adcCfg 2 1',
+        b'adcbufCfg -1 0 1 1 1',
+        b'profileCfg 0 60 993 7 40 0 0 100 1 144 4500 0 0 158',
+        b'chirpCfg 0 0 0 0 0 0 0 1',
+        b'frameCfg 0 0 32 0 33.333 1 0',
+        b'lowPower 0 0',
+        b'guiMonitor -1 1 1 0 0 0 1',
+        b'cfarCfg -1 0 2 8 4 3 0 15 1',
+        b'cfarCfg -1 1 0 8 4 4 1 15 1',
+        b'multiObjBeamForming -1 1 0.5',
+        b'clutterRemoval -1 0',
+        b'calibDcRangeSig -1 0 -5 8 256',
+        b'extendedMaxVelocity -1 0',
+        b'lvdsStreamCfg -1 0 0 0',
+        b'compRangeBiasAndRxChanPhase 0.0 1 0 -1 0 1 0 -1 0 1 0 -1 0 1 0 -1 0 1 0 -1 0 1 0 -1 0',
+        b'measureRangeBiasAndRxChanPhase 0 1.5 0.2',
+        b'CQRxSatMonitor 0 3 4 99 0',
+        b'CQSigImgMonitor 0 71 4',
+        b'analogMonitor 0 0',
+        b'aoaFovCfg -1 -90 90 -90 90',
+        b'cfarFovCfg -1 0 0 5.40',
+        b'cfarFovCfg -1 1 -1.21 1.21',
+        b'calibData 0 0 0',
+        b'sensorStart'
+    ]
+    
+    # Execute each command in sequence
+    for command in commands:
+        read_until_empty(conf)
+        conf.write(command)
 
     if start:
         start_radar(conf, full_config=True)
