@@ -69,6 +69,11 @@ def update_plot():
         ax.set_xlabel('X Coordinate')
         ax.set_ylabel('Y Coordinate')
         ax.set_zlabel('Z Coordinate')
+        
+        # Set axis limits
+        ax.set_xlim([-5, 5])
+        ax.set_ylim([0, 10])
+        ax.set_zlim([-5, 5])
 
         canvas.draw()
 
