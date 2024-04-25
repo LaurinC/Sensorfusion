@@ -1,6 +1,7 @@
 from interface.radar import Radar
 from time import time
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 from mpl_toolkits.mplot3d import Axes3D
 from IPython.display import display, clear_output
 from collections import deque
@@ -15,25 +16,45 @@ y = deque(maxlen=max_length)
 z = deque(maxlen=max_length)
 colors = deque(maxlen=max_length)  # Store color for each point
 
+# Plot limits
+x_min = -5
+x_max = 5
+y_min = 0
+y_max = 10
+z_min = -5
+z_max = 5
+
 # Create a figure and axis for the plot
 fig = plt.figure(figsize=(12, 6))
 
 # Subplot for 3D scatter
 ax_3d = fig.add_subplot(121, projection='3d')
-ax_3d.set_xlim([-5, 5])
-ax_3d.set_ylim([0, 10])
-ax_3d.set_zlim([-5, 5])
+ax_3d.set_xlim([x_min, x_max])
+ax_3d.set_ylim([y_min, y_max])
+ax_3d.set_zlim([z_min, z_max])
 ax_3d.set_xlabel('X Axis')
 ax_3d.set_ylabel('Y Axis')
 ax_3d.set_zlabel('Z Axis')
 
 # Subplot for 2D top-down view
 ax_2d = fig.add_subplot(122)
-ax_2d.set_xlim([-5, 5])
-ax_2d.set_ylim([0, 10])
+ax_2d.set_xlim([x_min, x_max])
+ax_2d.set_ylim([y_min, y_max])
 ax_2d.set_xlabel('X Axis')
 ax_2d.set_ylabel('Y Axis')
 ax_2d.set_title('Top-Down View (X-Y Plane)')
+
+# Draw degree lines every 10 degrees from the origin
+max_y = 10  # maximum Y-axis value
+for angle in range(0, 360, 10):
+    # Convert angle to radians for calculation
+    radians = np.deg2rad(angle)
+    # Calculate end point coordinates
+    x_end = max_y * np.sin(radians)
+    y_end = max_y * np.cos(radians)
+    # Plot the line
+    line = Line2D([0, x_end], [0, y_end], color='gray', linestyle='--', linewidth=0.5)
+    ax_2d.add_line(line)
 
 # Initial scatter plots
 sc_3d = ax_3d.scatter([], [], [], c=[], marker='.')
