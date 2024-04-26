@@ -1,7 +1,7 @@
 from serial import Serial
 from struct import unpack
-from . radar_config import stop_radar, config_radar, baudrate_data
-from . utility import intify, q_to_db
+from .radar_config import stop_radar, config_radar, baudrate_data
+from .utility import intify, q_to_db
 
 """
 Main class for interface
@@ -10,6 +10,18 @@ TODO:
 - increase sync speed (check for last 8 instead of reading in chunks?)
 - increase processing speed (process parallel to reading, tricky)
 - adjust output data format for specific needs
+
+Suggested changes:
+
+- implement sliding window search for magic word
+
+- streamline parsing process: 
+    pre-determining the size and structure of each block type based on the header 
+    can allow for more targeted parsing without inspecting each byte individually
+
+- use Struct for Binary Data:
+    instead of manually slicing and converting bytes, use the struct module more 
+    extensively to unpack data based on expected formats
 """
 
 class Radar():
@@ -41,6 +53,9 @@ class Radar():
             6: 'stats', 
             7: 'side_info'
         }
+
+    def has_data(self):
+        return self.data.inWaiting() > 0
 
     def __del__(self):
         # stop radar and close serial ports on destruction
