@@ -2,7 +2,7 @@ import numpy as np
 import cv2 as cv
 import os
 from argparse import ArgumentParser, Namespace
-from utils import load_from_folder
+from utils import load_from_folder, save_coeffs
 
 """Functions for grabbing calibration images (user still needs to manually select valid ones)
 and finding camera matrix and distortion coefficients
@@ -59,8 +59,14 @@ def calibrate(args : Namespace):
     ret, mtx, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
     # get refined camera matrix, cuts all invalid pixels from image and resizes to input
     newmtx, _ = cv.getOptimalNewCameraMatrix(mtx, dist, gray.shape[::-1], args.alpha, gray.shape[::-1])
-    # save coefficients 
-    np.savez(f'./coefficients/{args.out}.npz', mtx = mtx, dist = dist, newmtx = newmtx)
+    # save coefficients
+    save_coeffs(args.out, {
+        'mtx' : mtx,
+        'newmtx' : newmtx,
+        'dist' : dist,
+        'rvecs' : rvecs,
+        'tvecs' : tvecs
+    })
 
 if __name__ == '__main__':
     parser = ArgumentParser()
