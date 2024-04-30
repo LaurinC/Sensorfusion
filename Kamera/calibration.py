@@ -12,9 +12,9 @@ def grab_images(args : Namespace):
     # check if output directory exists
     if not os.path.exists(f'images/{args.out}'): os.makedirs(f'images/{args.out}')
     # initialize camera and set image size (this takes a while)
-    cap = cv.VideoCapture(1)
-    cap.set(cv.CAP_PROP_FRAME_WIDTH, 800)
-    cap.set(cv.CAP_PROP_FRAME_HEIGHT, 600)
+    cap = cv.VideoCapture(args.cam, cv.CAP_DSHOW)
+    cap.set(cv.CAP_PROP_FRAME_WIDTH, 1600)
+    cap.set(cv.CAP_PROP_FRAME_HEIGHT, 1200)
     # image indice
     i = 0
     # wait for user
@@ -57,11 +57,16 @@ def calibrate(args : Namespace):
     # assumption: distorted image has same dimensions as calibration images
     # get camera matrix from object, image points
     ret, mtx, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+    print(f'Calibration Error: {ret}')
     # get refined camera matrix, cuts all invalid pixels from image and resizes to input
     newmtx, _ = cv.getOptimalNewCameraMatrix(mtx, dist, gray.shape[::-1], args.alpha, gray.shape[::-1])
+    mtx_rad = mtx.copy()
+    # radar y grows upward -> flip sign of f_y
+    mtx_rad[1,1] = -mtx_rad[1,1]
     # save coefficients
-    save_coeffs(args.out, {
+    save_coeffs(args.inp, {
         'mtx' : mtx,
+        'mtx_rad' : mtx_rad,
         'newmtx' : newmtx,
         'dist' : dist,
         'rvecs' : rvecs,
@@ -70,15 +75,16 @@ def calibrate(args : Namespace):
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument('-out', help = 'Name of output directory', default = 'wide_lense')
-    parser.add_argument('-mode', help = 'Choose function to run', default = 'calibrate', choices = ['calibrate','grab'])
+    parser.add_argument('--mode', help = 'Choose function to run', default = 'calibrate', choices = ['calibrate','grab'])
     # arguments for grab_images
-    parser.add_argument('--num_imgs', help = 'Amount of images to capture', default = 25)
+    parser.add_argument('--cam', help = 'Capture device to use', default = 2, type = int)
+    parser.add_argument('--out', help = 'Name of output directory', default = 'test')
+    parser.add_argument('--num_imgs', help = 'Amount of images to capture', default = 50)
     # arguments for calibrate
-    parser.add_argument('--inp', help = 'Folder with input images', default = 'wide_lense')
+    parser.add_argument('--inp', help = 'Folder with input images', default = 'test')
     parser.add_argument('--rows', help = 'Number of rows in checkerboard pattern', default = 8)
     parser.add_argument('--cols', help = 'Number of cols in checkerboard pattern', default = 6)
-    parser.add_argument('--alpha', help = 'Crop images ? 1.0 : 0.0', default = 1.0)
+    parser.add_argument('--alpha', help = 'Crop images ? 1.0 : 0.0', default = 0.0)
     args = parser.parse_args()
 
     if args.mode == 'calibrate':
