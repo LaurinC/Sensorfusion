@@ -51,11 +51,10 @@ Main plot
 
 def display_fusion(img : np.ndarray, points : np.ndarray):
     # TODO: display velocity as label over projected points
-    # display points over image
-    plt.figure(figsize=(10, 6))
-    plt.suptitle('Projection Visualization')
-    plt.imshow(img)
-    plt.scatter(points[0, :], points[1, :], c = points[2, :], cmap = 'viridis', vmin = 0, vmax = 10)
-    cbar = plt.colorbar(shrink = 0.6)
+    fig, ax = plt.subplots(figsize=(10,6))
+    fig.suptitle('Projection Visualization')
+    ax.imshow(img)
+    sc = ax.scatter(points[0, :], points[1, :], c = points[2, :], cmap = 'viridis', vmin = 0, vmax = 10)
+    cbar = fig.colorbar(sc, shrink = 0.6)
     cbar.ax.set_ylabel('Z in [m]', rotation = 90)
-    plt.show()
+    return fig

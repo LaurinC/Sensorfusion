@@ -14,4 +14,5 @@ if __name__ == '__main__':
 
     while True:
         udst, points = fusion()
-        print(udst.shape)
+        fig = display_fusion(udst, points)
+        fig.show()
