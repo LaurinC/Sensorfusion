@@ -13,16 +13,12 @@ class Fusion():
         self.radar = Radar(radar_config)
 
     def __call__(self):
-        print('Capture')
         # get image from camera, undistort
         ret, img = self.cap.read()
-        print('Undistort')
         if not ret: print('Error accessing camera'); return
         udst = cv.undistort(img, self.params['mtx'], self.params['dist'])
-        print('Radar')
-        radar_data = self.radar()
-        print('Project')
         # get radar data, project to camera coordinate system
+        radar_data = self.radar()
         points = project_points(radar_data, self.params)
         return udst, points
     
