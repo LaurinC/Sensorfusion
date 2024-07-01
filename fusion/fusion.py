@@ -3,12 +3,14 @@ from .radar import Radar
 from .utils import load_coeffs, project_points
 
 class Fusion():
-    def __init__(self, radar_config : dict, params : str):
+    def __init__(self, radar_config : dict, params : str, downsample : int = 2):
         # setup camera
         self.params = load_coeffs(params)
+        self.mtx = self.params['mtx_rad']
+        self.mtx[:2,2] /= downsample
         self.cap = cv.VideoCapture(0)
-        self.cap.set(cv.CAP_PROP_FRAME_HEIGHT, 600)
-        self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 800)
+        self.cap.set(cv.CAP_PROP_FRAME_HEIGHT, 1200 // downsample)
+        self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 1600 // downsample)
         # setup radar
         self.radar = Radar(radar_config)
 
@@ -23,7 +25,7 @@ class Fusion():
         print('radar')
         radar_data = self.radar()
         print('project')
-        points = project_points(radar_data, self.params, 2)
+        points = project_points(radar_data, self.mtx)
         return udst, points
     
     def __del__(self):
