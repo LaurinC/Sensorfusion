@@ -15,19 +15,15 @@ def project_points(data : dict, cam_mtx : np.ndarray) -> np.ndarray:
     num_obj = data['header']['objects']
     points = data['detected_points']
     point_mtx = np.zeros((3, num_obj))
-    # cam_mtx = calib_params['mtx_rad']
-    # cam_mtx[:2,:] /= downsample
-    # print(cam_mtx)
     # fill matrix (y from radar is z in camera coordinates)
     point_mtx[0, :] = np.array([coords['x'] for coords in points.values()]) # X
     point_mtx[1, :] = np.array([coords['z'] for coords in points.values()]) # Y
     point_mtx[2, :] = np.array([coords['y'] for coords in points.values()]) # Z
-    print(point_mtx)
     # 2. project points (X,Y,Z) -> (u,v,Z)
     proj = (cam_mtx @ point_mtx) # (X,Y,Z) -> (u',v',Z)
-    proj[:2, :] /= point_mtx[2,:] # (u',v',Z) -> (u,v,Z)7
-    print(proj)
-    return proj
+    proj[:2, :] /= point_mtx[2,:] # (u',v',Z) -> (u,v,Z)
+    # 3. remove invalid points
+    return proj[:, np.all(proj>=0,axis=0)]
 
 """
 Random functions needed in conversion of tlv packages
