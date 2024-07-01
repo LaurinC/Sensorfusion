@@ -1,9 +1,4 @@
 numpy
 opencv-python
-matplotlib
 pyserial
-ultralytics
-pandas
-dash
-dash_bootstrap_components
-plotly
+matplotlib
