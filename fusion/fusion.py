@@ -20,7 +20,7 @@ class Fusion():
         ret, img = self.cap.read()
         print('udst')
         if not ret: print('Error accessing camera'); return
-        udst = cv.undistort(img, self.params['mtx'], self.params['dist'])
+        udst = cv.undistort(img, self.params['mtx'], self.params['dist'])[...,::-1]
         # get radar data, project to camera coordinate system
         print('radar')
         radar_data = self.radar()
