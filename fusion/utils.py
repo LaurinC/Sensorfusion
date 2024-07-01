@@ -19,11 +19,15 @@ def project_points(data : dict, cam_mtx : np.ndarray) -> np.ndarray:
     point_mtx[0, :] = np.array([coords['x'] for coords in points.values()]) # X
     point_mtx[1, :] = np.array([coords['z'] for coords in points.values()]) # Y
     point_mtx[2, :] = np.array([coords['y'] for coords in points.values()]) # Z
+    print(point_mtx)
     # 2. project points (X,Y,Z) -> (u,v,Z)
     proj = (cam_mtx @ point_mtx) # (X,Y,Z) -> (u',v',Z)
     proj[:2, :] /= point_mtx[2,:] # (u',v',Z) -> (u,v,Z)
+    print(proj)
     # 3. remove invalid points
-    return proj[:, np.all((proj>=0)&(proj[0,:]<800)&(proj[0,:]<600) ,axis=0)]
+    valid = proj[:, np.all((proj>=0)&(proj[0,:]<800)&(proj[0,:]<600) ,axis=0)]
+    print(valid)
+    return valid
 
 """
 Random functions needed in conversion of tlv packages
