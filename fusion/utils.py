@@ -23,7 +23,7 @@ def project_points(data : dict, cam_mtx : np.ndarray) -> np.ndarray:
     proj = (cam_mtx @ point_mtx) # (X,Y,Z) -> (u',v',Z)
     proj[:2, :] /= point_mtx[2,:] # (u',v',Z) -> (u,v,Z)
     # 3. remove invalid points
-    return proj[:, np.all(proj>=0,axis=0)]
+    return proj[:, np.all((proj>=0)&(proj[0,:]<800)&(proj[0,:]<600) ,axis=0)]
 
 """
 Random functions needed in conversion of tlv packages
