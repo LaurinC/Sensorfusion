@@ -23,7 +23,7 @@ class Fusion():
         print('radar')
         radar_data = self.radar()
         print('project')
-        points = project_points(radar_data, self.params)
+        points = project_points(radar_data, self.params, 2)
         return udst, points
     
     def __del__(self):
