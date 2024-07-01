@@ -15,7 +15,8 @@ def project_points(data : dict, calib_params : dict, downsample : int = 1) -> np
     num_obj = data['header']['objects']
     points = data['detected_points']
     point_mtx = np.zeros((3, num_obj))
-    cam_mtx = calib_params['mtx_rad'][:2,:] / downsample
+    cam_mtx = calib_params['mtx_rad']
+    cam_mtx[:2,:] / downsample
     print(cam_mtx)
     # fill matrix (y from radar is z in camera coordinates)
     point_mtx[0, :] = np.array([coords['x'] for coords in points.values()]) # X
