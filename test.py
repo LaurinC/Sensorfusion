@@ -1,5 +1,6 @@
 from fusion.fusion import Fusion
-from fusion.utils import display_fusion
+from fusion.utils import display_fusion, label_image
+from cv2 import waitKey, imshow, destroyAllWindows, namedWindow
 
 if __name__ == '__main__':
     # options for com ports
@@ -12,9 +13,14 @@ if __name__ == '__main__':
     }
     fusion = Fusion(com, 'wide_lense1')
 
-    while True:
+    namedWindow('Sensorfusion')
+
+    while waitKey(33) != 27:
         udst, points = fusion()
-        fig = display_fusion(udst, points)
-        while not fig.waitforbuttonpress(): pass
-        
-        break
+        img = label_image(udst, points)
+        imshow('Sensorfusion', img)
+
+        # fig = display_fusion(udst, points)
+        # while not fig.waitforbuttonpress(): pass
+    
+    destroyAllWindows()
