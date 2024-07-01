@@ -7,7 +7,7 @@ projecting radar points into camera coordinate system
 """
 
 def load_coeffs(name : str) -> dict:
-    return dict(np.load(f'coefficients/{name}.npz'))
+    return dict(np.load(f'fusion/coefficients/{name}.npz'))
 
 def project_points(data : dict, calib_params : dict) -> np.ndarray:
     # 1. create point matrix

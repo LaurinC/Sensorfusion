@@ -4,13 +4,13 @@ from .utils import load_coeffs, project_points
 
 class Fusion():
     def __init__(self, radar_config : dict, params : str):
-        # setup radar
-        self.radar = Radar(radar_config)
         # setup camera
         self.params = load_coeffs(params)
         self.cap = cv.VideoCapture(0)
         self.cap.set(cv.CAP_PROP_FRAME_HEIGHT, 600)
         self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 800)
+        # setup radar
+        self.radar = Radar(radar_config)
 
     def __call__(self):
         # get image from camera, undistort
