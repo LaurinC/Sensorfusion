@@ -15,5 +15,6 @@ if __name__ == '__main__':
     while True:
         udst, points = fusion()
         fig = display_fusion(udst, points)
-        fig.show()
+        while not fig.waitforbuttonpress(): pass
+        
         break
