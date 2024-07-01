@@ -16,3 +16,4 @@ if __name__ == '__main__':
         udst, points = fusion()
         fig = display_fusion(udst, points)
         fig.show()
+        break
