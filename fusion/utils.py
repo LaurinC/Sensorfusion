@@ -9,13 +9,14 @@ projecting radar points into camera coordinate system
 def load_coeffs(name : str) -> dict:
     return dict(np.load(f'fusion/coefficients/{name}.npz'))
 
-def project_points(data : dict, calib_params : dict) -> np.ndarray:
+def project_points(data : dict, calib_params : dict, downsample : int = 1) -> np.ndarray:
     # 1. create point matrix
     # initialize
     num_obj = data['header']['objects']
     points = data['detected_points']
     point_mtx = np.zeros((3, num_obj))
     cam_mtx = calib_params['mtx_rad']
+    if downsample > 2: cam_mtx[:2,:] /= 2
     # fill matrix (y from radar is z in camera coordinates)
     point_mtx[0, :] = np.array([coords['x'] for coords in points.values()]) # X
     point_mtx[1, :] = np.array([coords['z'] for coords in points.values()]) # Y
