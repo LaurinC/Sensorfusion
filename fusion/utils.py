@@ -29,7 +29,6 @@ def project_points(data : dict, cam_mtx : np.ndarray) -> np.ndarray:
     proj = np.vstack((proj, v))
     # 3. remove points not displayable inside image
     valid = proj[:, np.all((proj[:3,:]>=0)&(proj[0,:]<800)&(proj[1,:]<600) ,axis=0)]
-    print(valid)
     return valid
 
 """

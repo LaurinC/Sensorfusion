@@ -68,14 +68,12 @@ class Radar():
         # create buffer for sliding window
         last8 = [b'\x00'] * 8
         # synchronize
-        print('unsynced')
         while (b''.join(last8) != self.magic_word):
             # read new byte
             byte = self.data.read(1)
             # slide window, append new byte
             last8[:7] = last8[1:]
             last8[7] = byte
-        print('synced')
         # add magic word to buffer
         self.input['buffer'] = b''.join(last8)
         # 8 bytes for version + frame length
