@@ -7,13 +7,10 @@ from .utils import intify, q_to_db
 Main class for interface
 
 TODO:
-- increase sync speed (check for last 8 instead of reading in chunks?)
 - increase processing speed (process parallel to reading, tricky)
 - adjust output data format for specific needs
 
 Suggested changes:
-
-- implement sliding window search for magic word
 
 - streamline parsing process: 
     pre-determining the size and structure of each block type based on the header 
@@ -68,30 +65,30 @@ class Radar():
         self.close()
         
     def read_uart(self):
-        # read one data frame
-        while True:
-            # TODO: check for last 8 instead, seems to take too long to sync
-            dat = self.data.read(self.size)
-            self.input['buffer'] += dat
-            # check for magic word
-            if dat[:len(self.magic_word)] == self.magic_word:
-                if not self.sync:
-                    # reset when new frame starts
-                    self.input['buffer'] = dat
-                    self.output = {}
-                    self.sync = True
-                else: break
-        self.sync = False
-        # check if something is in buffer
-        if len(self.input['buffer']) > 0: 
-            # remove magic word
-            self.input['buffer'] = self.input['buffer'][:-32]
-            # process frame
-            self.parse()
-        else:
-            # if nothing is in buffer try again 
-            self.read_uart()
-    
+        # create buffer for sliding window
+        last8 = [b'\x00'] * 8
+        # synchronize
+        print('unsynced')
+        while (b''.join(last8) != self.magic_word):
+            # read new byte
+            byte = self.data.read(1)
+            # slide window, append new byte
+            last8[:7] = last8[1:]
+            last8[7] = byte
+        print('synced')
+        # add magic word to buffer
+        self.input['buffer'] = b''.join(last8)
+        # 8 bytes for version + frame length
+        self.input['buffer'] += self.data.read(8)
+        # convert length to int
+        length = int.from_bytes(self.input['buffer'][-4:], 'little')
+        # read rest of frame
+        self.input['buffer'] += self.data.read(length - 16)
+        # reset for parsing
+        self.output = {}
+        # parse
+        self.parse()
+        
     def parse(self):
         buffer = self.input['buffer']
         address = 0
