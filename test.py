@@ -1,5 +1,4 @@
 from fusion.fusion import Fusion
-from fusion.utils import display_fusion, label_image
 from cv2 import waitKey, imshow, destroyAllWindows, namedWindow
 
 if __name__ == '__main__':
@@ -11,16 +10,11 @@ if __name__ == '__main__':
         'data_port': '/dev/ttyUSB1',
         'data_baud': 921600
     }
-    fusion = Fusion(com, 'wide_lense1')
+    fusion = Fusion(com, 'wide_lense1', downsample=1)
 
     namedWindow('Sensorfusion')
 
     while waitKey(33) != 27:
-        udst, points = fusion()
-        img = label_image(udst, points)
+        img = fusion()
         imshow('Sensorfusion', img)
-
-        # fig = display_fusion(udst, points)
-        # while not fig.waitforbuttonpress(): pass
-    
     destroyAllWindows()

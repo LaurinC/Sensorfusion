@@ -1,6 +1,6 @@
 import cv2 as cv
 from .radar import Radar
-from .utils import load_coeffs, project_points
+from .utils import load_coeffs, project_points, label_image
 
 class Fusion():
     def __init__(self, radar_config : dict, params : str, downsample : int = 2):
@@ -19,10 +19,10 @@ class Fusion():
         ret, img = self.cap.read()
         if not ret: print('Error accessing camera'); return
         udst = cv.undistort(img, self.params['mtx'], self.params['dist'])
-        # get radar data, project to camera coordinate system
+        # get radar data, project onto image plane
         radar_data = self.radar()
-        points = project_points(radar_data, self.mtx)
-        return udst, points
+        points = project_points(radar_data, self.mtx, t = (0.,0.045))
+        return label_image(udst, points)
     
     def __del__(self):
         self.radar.close()

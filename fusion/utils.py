@@ -11,16 +11,22 @@ projecting radar points into camera coordinate system
 def load_coeffs(name : str) -> dict:
     return dict(np.load(f'fusion/coefficients/{name}.npz'))
 
-def project_points(data : dict, cam_mtx : np.ndarray) -> np.ndarray:
+def project_points(data : dict, cam_mtx : np.ndarray, t : tuple = (0.,0.)) -> np.ndarray:
+    """ Project radar points onto image plane
+
+        data    : data package from radar sensor
+        cam_mtx : camera matrix of used camera
+        t       : (x,y) translation from radar to camera in meters
+    """
     # 1. create point matrix
     # initialize
     num_obj = data['header']['objects']
     points = data['detected_points']
     point_mtx = np.zeros((3, num_obj))
     # fill matrix (y from radar is z in camera coordinates)
-    point_mtx[0, :] = np.array([coords['x'] for coords in points.values()]) # X
-    point_mtx[1, :] = np.array([coords['z'] for coords in points.values()]) # Y
-    point_mtx[2, :] = np.array([coords['y'] for coords in points.values()]) # Z
+    point_mtx[0, :] = np.array([coords['x'] for coords in points.values()]) - t[0] # X
+    point_mtx[1, :] = np.array([coords['z'] for coords in points.values()]) - t[1] # Y
+    point_mtx[2, :] = np.array([coords['y'] for coords in points.values()])        # Z
     v = np.array([coords['v'] for coords in points.values()])
     # 2. project points (X,Y,Z) -> (u,v,Z)
     proj = (cam_mtx @ point_mtx) # (X,Y,Z) -> (u',v',Z)
