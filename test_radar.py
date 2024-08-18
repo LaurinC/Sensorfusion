@@ -1,4 +1,4 @@
-from fusion.fusion import Fusion
+from fusion.fusion import Dummy
 import cv2 as cv
 
 if __name__ == '__main__':
@@ -10,7 +10,7 @@ if __name__ == '__main__':
         'data_port': '/dev/ttyUSB1',
         'data_baud': 921600
     }
-    fusion = Fusion(com, 'wide_lense1', downsample=1)
+    fusion = Dummy(com, 'wide_lense1', downsample=1)
 
     cv.namedWindow('Sensorfusion', cv.WINDOW_NORMAL)
     cv.setWindowProperty('Sensorfusion', cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
