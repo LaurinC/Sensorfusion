@@ -77,11 +77,11 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('--mode', help = 'Choose function to run', default = 'calibrate', choices = ['calibrate','grab'])
     # arguments for grab_images
-    parser.add_argument('--cam', help = 'Capture device to use', default = 2, type = int)
-    parser.add_argument('--out', help = 'Name of output directory', default = 'test')
+    parser.add_argument('--cam', help = 'Capture device to use', default = 1, type = int)
+    parser.add_argument('--out', help = 'Name of output directory', default = 'wide_lense_3')
     parser.add_argument('--num_imgs', help = 'Amount of images to capture', default = 50)
     # arguments for calibrate
-    parser.add_argument('--inp', help = 'Folder with input images', default = 'test')
+    parser.add_argument('--inp', help = 'Folder with input images', default = 'wide_lense_3')
     parser.add_argument('--rows', help = 'Number of rows in checkerboard pattern', default = 8)
     parser.add_argument('--cols', help = 'Number of cols in checkerboard pattern', default = 6)
     parser.add_argument('--alpha', help = 'Crop images ? 1.0 : 0.0', default = 0.0)
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
     if args.mode == 'calibrate':
         calibrate(args)
-    else:
+    else: 
         grab_images(args)
 
     
