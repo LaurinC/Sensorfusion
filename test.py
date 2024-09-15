@@ -12,7 +12,8 @@ if __name__ == '__main__':
     }
     fusion = Fusion(com, 'wide_lense3', downsample=2)
 
-    cv.namedWindow('Sensorfusion', cv.WINDOW_NORMAL)
+    cv.namedWindow('Sensorfusion', cv.WND_PROP_FULLSCREEN)
+    # cv.setWindowProperty('Sensorfusion', cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
 
     while cv.waitKey(33) != 27:
         img = fusion()
