@@ -20,3 +20,4 @@ python calibration.py --mode grab --cam 0 --out name --num_imgs 50
 ```
 python calibration.py --mode calibrate --inp name --rows x --cols y 
 ```
+- Ausgabe als name.json (Human Readable) und name.npz (Für die weitere Nutzung)
