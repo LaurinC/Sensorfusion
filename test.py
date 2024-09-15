@@ -10,7 +10,7 @@ if __name__ == '__main__':
         'data_port': '/dev/ttyUSB1',
         'data_baud': 921600
     }
-    fusion = Fusion(com, 'wide_lense3', downsample=1)
+    fusion = Fusion(com, 'wide_lense3', downsample=2)
 
     cv.namedWindow('Sensorfusion', cv.WINDOW_NORMAL)
 
