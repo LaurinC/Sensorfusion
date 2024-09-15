@@ -12,6 +12,8 @@ pip install -r requirements.txt
 ```
 python calibration.py --mode grab --cam 0 --out name --num_imgs 50
 ```
+- Programm begleitet durch die Schritte
+- Schlechte Aufnahmen (Unscharf, Target nicht vollständig im Bild) müssen vom Nutzer manuell vor der Kalibrierung bereinigt werden
 
 ## Kalibrierung (Benötigt Kalibrierungsbilder)
 - --rows x und --cols y entsprechen der Anzahl der inneren Reihen und Spalten des Kalibrierungstarget, für das Beispielbild wären es 8 und 6
