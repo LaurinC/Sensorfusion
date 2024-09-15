@@ -18,14 +18,19 @@ def grab_images(args : Namespace):
     # image indice
     i = 0
     # wait for user
+    print('Please actively change the pose of the calibration target\nFor best results try and keep the target inside the image and focused')
     _ = input('Ready? ')
+
+    cv.namedWindow('Grabbing', cv.WINDOW_NORMAL)
+    cv.setWindowProperty('Grabbing', cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
+
     while True:
         # read image
         ret, img = cap.read()
         # check for valid frame
         if not ret: break
         # show video stream
-        cv.imshow('Stream', img)
+        cv.imshow('Grabbing', img)
         # save image
         cv.imwrite(f'images/{args.out}/{i+1}.jpg', img)
         i += 1
